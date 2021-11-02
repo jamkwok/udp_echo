@@ -1,4 +1,5 @@
 import socket
+import time
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -11,5 +12,6 @@ print("Listening on " + server_address + ":" + str(server_port))
 
 while True:
 	payload, client_address = sock.recvfrom(1024)
+	time.sleep(0.5)
 	print("Echoing data back to " + str(client_address))
 	sent = sock.sendto(payload, client_address)
