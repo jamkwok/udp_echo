@@ -3,9 +3,16 @@ import socket
 import asyncio
 
 async def receiveReply(socket):
-    socket.settimeout(2)
-    response = socket.recvfrom(1024)
-    print(response[0].decode())
+    try:
+        socket.settimeout(2)
+        response = socket.recvfrom(1024)
+        print(response[0].decode())
+    except Exception as e:
+        print("timeout")
+
+async def sendMessage(socket, address, port, message):
+    socket.sendto(message.encode(), (address,port))
+
 
 async def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -13,8 +20,9 @@ async def main():
     server_port = 31337
 
     message = 'Hello World'
-    client_socket.sendto(message.encode(), (server_address,server_port))
-    asyncio.create_task(receiveReply(client_socket))
-    await asyncio.sleep(5)
+    while True:
+        await sendMessage(client_socket, server_address, server_port, message)
+        asyncio.create_task(receiveReply(client_socket))
+        await asyncio.sleep(0.2)
 
 asyncio.run(main())

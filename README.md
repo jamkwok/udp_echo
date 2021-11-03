@@ -1,1 +1,4 @@
-UDP reply, Run on each machine
+# UDP reply example
+
+python3 server.py
+python3 client.py
